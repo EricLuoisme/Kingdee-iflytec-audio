@@ -2,22 +2,15 @@ import time
 
 from AudioProcess.data import WakeWord_Setting, Timing_Setting
 from AudioProcess import Main_process, Script_General_Ledger, Script_Receivable_module
+from NewAudioProcess import Status
 
 
 def arouse_recognize(result):
-    if result is not "":
-        if result.__contains__(WakeWord_Setting.wake_word):
-            print("您好，小智来了")
-            tt = Main_process.TapTester()
-            time.sleep(1)
-            print('开始接收指令')
-            for ii in range(Timing_Setting.script_record_time):
-                check = tt.listen(2)
-                if check:
-                    # 正确执行指令后，check为True
-                    return True
+
+    if result.__contains__(WakeWord_Setting.wake_word):
+        return Status('Arousing')
     else:
-        return False
+        return None
 
 
 def script_recognize(result):
