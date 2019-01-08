@@ -13,7 +13,7 @@ def do_script(result, num):
             break
     if check:
         print(Sin_General_Ledger.get_answer(sce))
-        Recognition_process.doing_voice_Comb(Sin_General_Ledger.get_answer(sce))
+        Recognition_process.doing_voice_comb(Sin_General_Ledger.get_answer(sce))
 
         return False
         ###################################

@@ -2,13 +2,13 @@ import time
 
 from AudioProcess.data import WakeWord_Setting, Timing_Setting
 from AudioProcess import Main_process, Script_General_Ledger, Script_Receivable_module
-from NewAudioProcess import Status
+from NAudioProcess import NStatus
 
 
 def arouse_recognize(result):
 
     if result.__contains__(WakeWord_Setting.wake_word):
-        return Status('Arousing')
+        return NStatus('Arousing')
     else:
         return None
 
@@ -20,22 +20,26 @@ def script_recognize(result):
 
         # 错误唤醒 操作
         if result.__contains__("没事"):
-            return True
+            return NStatus('Mis_operation')
 
         # 制作/生成 操作
         if result.__contains__("制作") or result.__contains__("生成"):
             # 总账场景 2 + 应收场景 1
             check = Script_General_Ledger.do_script(result, 2)  # 完成执行操作后，check应返回False
             if check is False:
-                return True
+                return NStatus('General_Ledger', 2)
 
             check = Script_Receivable_module.do_script(result, 1)  # 完成执行操作后，check应返回False
             if check is False:
-                return True
+                return NStatus('Receivable_Module', 1)
 
         # 处理/审核 操作
         elif result.__contains__("处理"):
             # 总账场景 3,5 + 应收场景 2
+
+            # 子场景需要回调 调用的函数
+            # 需要得到具体函数形式才能对此块进行修改
+
             check = Script_General_Ledger.do_script(result, 3)  # 完成执行操作后，check应返回False
             if check is False:
                 mode_3_trigger('g', 3)  # 这边存在子场景
@@ -44,6 +48,7 @@ def script_recognize(result):
             if check is False:
                 mode_3_trigger('g', 5)  # 这边存在子场景
                 return True
+
             check = Script_Receivable_module.do_script(result, 2)  # 完成执行操作后，check应返回False
             if check is False:
                 mode_3_trigger('r', 2)  # 这边存在子场景
@@ -54,15 +59,15 @@ def script_recognize(result):
             # 总账场景 4,6 + 应收场景 3
             check = Script_General_Ledger.do_script(result, 4)  # 完成执行操作后，check应返回False
             if check is False:
-                return True
+                return NStatus('General_Ledger', 4)
             check = Script_General_Ledger.do_script(result, 6)  # 完成执行操作后，check应返回False
             if check is False:
-                return True
+                return NStatus('General_Ledger', 6)
             check = Script_Receivable_module.do_script(result, 3)  # 完成执行操作后，check应返回False
             if check is False:
-                return True
+                return NStatus('Receivable_Module', 3)
     else:
-        return False
+        return None
 
 
 def mode_3_trigger(scenario, scenario_number):

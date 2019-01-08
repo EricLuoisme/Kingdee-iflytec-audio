@@ -54,7 +54,7 @@ def doing_recog(outfile, check):
         return result[0]
 
 
-def doing_voice_Comb(sentence):
+def doing_voice_comb(sentence):
     client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
     result = client.synthesis(sentence)
     # 识别正确返回语音二进制 错误则返回dict 参照下面错误码
