@@ -12,7 +12,7 @@ def arouse_recognize(result):
         return None
 
 
-def script_recognize(result):
+def script_recognize(result, FILE_NUMBER):
     # 返回True：已经执行
     # 返回False：需要重新录音
     if result is not "":
@@ -21,48 +21,49 @@ def script_recognize(result):
         if result.__contains__("没事"):
             return NStatus.Status('Mis_operation')
 
-        # 制作/生成 操作
-        if result.__contains__("制作") or result.__contains__("生成"):
-            # 总账场景 2 + 应收场景 1
-            check = NScript_General_Ledger.do_script(result, 2)  # 完成执行操作后，check应返回False
-            if check is False:
-                return NStatus.Status('General_Ledger', 2)
-
-            check = NScript_Receivable_module.do_script(result, 1)  # 完成执行操作后，check应返回False
-            if check is False:
-                return NStatus.Status('Receivable_Module', 1)
-
-        # 处理/审核 操作
-        elif result.__contains__("处理"):
+            # 处理/审核 操作
+        if result.__contains__("处理"):
             # 总账场景 3,5 + 应收场景 2
 
             # 子场景需要回调 调用的函数
             # 需要得到具体函数形式才能对此块进行修改
 
-            check = NScript_General_Ledger.do_script(result, 3)  # 完成执行操作后，check应返回False
-            if check is False:
-                # mode_3_trigger('g', 3)  # 这边存在子场景
-                return True
-            check = NScript_General_Ledger.do_script(result, 5)  # 完成执行操作后，check应返回False
+            check = NScript_General_Ledger.do_script(result, 5, FILE_NUMBER)  # 完成执行操作后，check应返回False
             if check is False:
                 # mode_3_trigger('g', 5)  # 这边存在子场景
                 return True
 
-            check = NScript_Receivable_module.do_script(result, 2)  # 完成执行操作后，check应返回False
+            check = NScript_General_Ledger.do_script(result, 3, FILE_NUMBER)  # 完成执行操作后，check应返回False
+            if check is False:
+                # mode_3_trigger('g', 3)  # 这边存在子场景
+                return True
+
+            check = NScript_Receivable_module.do_script(result, 2, FILE_NUMBER)  # 完成执行操作后，check应返回False
             if check is False:
                 # mode_3_trigger('r', 2)  # 这边存在子场景
                 return True
 
-        # 查看设置 操作
-        elif result.__contains__("查看") or result.__contains__("设置"):
-            # 总账场景 4,6 + 应收场景 3
-            check = NScript_General_Ledger.do_script(result, 4)  # 完成执行操作后，check应返回False
+        # 制作/生成 操作
+        elif result.__contains__("制作"):
+            # 总账场景 2 + 应收场景 1
+            check = NScript_General_Ledger.do_script(result, 2, FILE_NUMBER)  # 完成执行操作后，check应返回False
             if check is False:
-                return NStatus.Status('General_Ledger', 4)
-            check = NScript_General_Ledger.do_script(result, 6)  # 完成执行操作后，check应返回False
+                return NStatus.Status('General_Ledger', 2)
+
+            check = NScript_Receivable_module.do_script(result, 1, FILE_NUMBER)  # 完成执行操作后，check应返回False
+            if check is False:
+                return NStatus.Status('Receivable_Module', 1)
+
+        # 查看设置 操作
+        elif result.__contains__("查看") or result.__contains__("设置") or result.__contains__("看看"):
+            # 总账场景 4,6 + 应收场景 3
+            check = NScript_General_Ledger.do_script(result, 6, FILE_NUMBER)  # 完成执行操作后，check应返回False
             if check is False:
                 return NStatus.Status('General_Ledger', 6)
-            check = NScript_Receivable_module.do_script(result, 3)  # 完成执行操作后，check应返回False
+            check = NScript_General_Ledger.do_script(result, 4, FILE_NUMBER)  # 完成执行操作后，check应返回False
+            if check is False:
+                return NStatus.Status('General_Ledger', 4)
+            check = NScript_Receivable_module.do_script(result, 3, FILE_NUMBER)  # 完成执行操作后，check应返回False
             if check is False:
                 return NStatus.Status('Receivable_Module', 3)
     else:

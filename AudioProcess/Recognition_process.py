@@ -54,15 +54,19 @@ def doing_recog(outfile, check):
         return result[0]
 
 
-def doing_voice_comb(sentence):
+def doing_voice_comb(sentence, FILE_NUMBER):
+
     client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
     result = client.synthesis(sentence)
     # 识别正确返回语音二进制 错误则返回dict 参照下面错误码
     if not isinstance(result, dict):
-        with open(File_Setting.outPath_Combin + 'answer.mp3', 'wb') as f:
+        with open(File_Setting.outPath_Combin + 'answer' + str(FILE_NUMBER) + '.mp3', 'wb') as f:
+        # with open(File_Setting.outPath_Combin + 'answer.mp3', 'wb') as f:
             f.write(result)
-    play_sound()
+    # FILE_NUMBER = FILE_NUMBER + 1
+    play_sound(FILE_NUMBER)
 
 
-def play_sound():
-    playsound(File_Setting.outPath_Combin + 'answer.mp3')
+def play_sound(FILE_NUMBER):
+    playsound(File_Setting.outPath_Combin + 'answer' + str(FILE_NUMBER) + '.mp3')
+    # playsound(File_Setting.outPath_Combin + 'answer.mp3')

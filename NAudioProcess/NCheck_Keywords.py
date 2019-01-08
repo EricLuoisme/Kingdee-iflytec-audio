@@ -3,7 +3,20 @@
 def detect_keywords_percentage(string, keywords):
     # 对输入的场景的keywords进行检测，获得百分比
     inside = 0
-    for i in keywords:
+
+    key = keywords.get(0)
+    main_key_check = True
+    for j in key:
+        if string.__contains__(j):
+            main_key_check = False
+            # 如果包含主要关键词中的一个，既为包含主要关键词
+            break
+
+    if main_key_check:
+        # 如果没有包含主要关键词，直接返回为0
+        return 0
+
+    for i in range(1, len(keywords)):
         have = False
         this_keywords = keywords.get(i)
         for j in this_keywords:
@@ -14,7 +27,7 @@ def detect_keywords_percentage(string, keywords):
             inside += 1
             continue
 
-    return inside/keywords.__len__()
+    return (inside+1)/keywords.__len__()
 
 
 
