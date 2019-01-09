@@ -1,6 +1,5 @@
-from AudioProcess.data import NSin_Receivable_Module
-from AudioProcess import Recognition_process
-from NAudioProcess import NCheck_Keywords
+from NAudioProcess.data import NSin_Receivable_Module
+from NAudioProcess import NCheck_Keywords, Recognition_process
 
 
 def do_script(result, num, FILE_NUMBER):

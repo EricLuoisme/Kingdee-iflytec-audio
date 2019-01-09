@@ -1,7 +1,5 @@
-import time
-
-from AudioProcess.data import WakeWord_Setting, Timing_Setting
-from NAudioProcess import NMain_process, NScript_General_Ledger, NScript_Receivable_module, NStatus
+from NAudioProcess.data import WakeWord_Setting
+from NAudioProcess import NScript_General_Ledger, NScript_Receivable_module, NStatus
 
 
 def arouse_recognize(result):

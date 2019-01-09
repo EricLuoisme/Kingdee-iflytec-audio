@@ -1,7 +1,5 @@
-import time
 import os
-from AudioProcess import Main_process
-from AudioProcess.data import Timing_Setting, File_Setting
+from NAudioProcess.data import File_Setting
 
 
 # 判断是否存在路径，没有则创建

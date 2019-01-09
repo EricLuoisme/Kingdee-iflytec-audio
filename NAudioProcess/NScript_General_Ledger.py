@@ -1,6 +1,5 @@
-from AudioProcess.data import NSin_General_Ledger
-from AudioProcess import Recognition_process
-from NAudioProcess import NCheck_Keywords
+from NAudioProcess.data import NSin_General_Ledger
+from NAudioProcess import Recognition_process, NCheck_Keywords
 
 
 def do_script(result, num, FILE_NUMBER):
